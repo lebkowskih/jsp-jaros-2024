@@ -20,7 +20,7 @@
 	        String word = request.getParameter("word");
 	        if (word != null && !word.isEmpty()) { 
 	    %>
-	        <div>Data submitted: <%= word %></div>
+	        <div><%= word %></div>
 	    <% } %>
 		</div>
 	</div>
