@@ -15,13 +15,37 @@
 			<button class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Wyślij</button>
 		</form>
 		<div>
-		<!-- Display data if it exists -->
-	    <% 
-	        String word = request.getParameter("word");
-	        if (word != null && !word.isEmpty()) { 
-	    %>
-	        <div><%= word %></div>
-	    <% } %>
+		<%@ page import="java.util.List" %>
+		<%@ page import="java.sql.SQLException" %>
+		<%@ page import="pl.jaros.Models.ProductDAO" %>
+		<%@ page import="pl.jaros.Models.Product" %>
+		
+
+		<% 
+		    String word = request.getParameter("word");
+		    ProductDAO productDAO = new ProductDAO();
+		    List<Product> products = null;
+		    
+		    if (word != null && !word.isEmpty()) {
+		        try {
+		            products = productDAO.getAllProducts();
+		        } catch (SQLException e) {
+		            e.printStackTrace(); // Handle exception appropriately
+		        }
+		    }
+		%>
+
+		<!-- Display products if products list is not null -->
+		<% if (products != null) { %>
+		    <% for (Product product : products) { %>
+		    
+			<div class="mx-auto block max-w-sm  mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+				<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><%= product.getName() %></h5>
+				<p class="font-normal text-gray-700 dark:text-gray-400"><%= product.getPrice() %> - <%= product.getSupplier() %></p>
+			</div>
+		    <% } %>
+		<% } %>
+		
 		</div>
 	</div>
 </body>

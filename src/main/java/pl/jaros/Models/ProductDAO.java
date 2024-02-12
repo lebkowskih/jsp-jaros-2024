@@ -3,7 +3,11 @@ package pl.jaros.Models;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mysql.cj.jdbc.*;
 
 public class ProductDAO {
@@ -28,5 +32,26 @@ public class ProductDAO {
 
             statement.executeUpdate();
         }
+    }
+    
+    public List<Product> getAllProducts() throws SQLException {
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT * FROM products ORDER BY price";
+
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            PreparedStatement statement = conn.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String price = resultSet.getString("price");
+                String supplier = resultSet.getString("supplier");
+
+                Product product = new Product(name, price, supplier);
+                products.add(product);
+            }
+        }
+
+        return products;
     }
 }
