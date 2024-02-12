@@ -4,11 +4,13 @@ import org.jsoup.*;
 import org.jsoup.nodes.*; 
 import org.jsoup.select.*;
 
+import pl.jaros.Models.Product;
+import pl.jaros.Models.ProductDAO;
+
 import java.io.IOException;
-import java.util.ArrayList; 
+import java.sql.SQLException;
 
-
-public class XKomScraperService implements WebScrapperInterface {
+public class XKomScraperService implements WebScraperInterface {
 	String parameter;
 	Document doc;
 
@@ -25,11 +27,16 @@ public class XKomScraperService implements WebScrapperInterface {
 					.get();
 	
 			Elements products = doc.select("div[data-name='productCard']");
+	        ProductDAO productDAO = new ProductDAO();
+
 			for (Element product: products) {
-				System.out.println(product.selectFirst("h3").text());
-				System.out.println(product.select("span[data-name='productPrice']").text());
+				String name = product.selectFirst("h3").text();
+				String price = product.select("span[data-name='productPrice']").text();
+
+				Product productToAdd = new Product(name, price, "X-KOM");
+				productDAO.insert(productToAdd);
 			}
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
 	}

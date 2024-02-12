@@ -1,6 +1,5 @@
-package pl.jaros;
+package pl.jaros.Servlets;
 
-import pl.jaros.Services.*;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +11,12 @@ import pl.jaros.Services.MoreleScraperService;
 
 @WebServlet("/")
 public class IndexServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
     
